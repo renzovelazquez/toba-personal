@@ -1,5 +1,4 @@
-version: '3.7'
-
+version: '3.9'
 services:
  pg:
   image: postgres:12
@@ -10,27 +9,29 @@ services:
     POSTGRES_USER       : postgres
     POSTGRES_PASSWORD   : postgres
 
- <NOMBRE PROYECTO>:
-  image: siudocker/php:7.4-web-v1.0.2
-  container_name: <NOMBRE PROYECTO>
-  ports:
-   - "7008:8080"
-  environment:
-    DOCKER_NAME                       : <NOMBRE PROYECTO>
-    DOCKER_WEB_PORT                   : 7008
-    TOBA_PASS                         : toba
-    TOBA_BASE_PASS                    : postgres
-    TOBA_INSTALACION_DIR              : /var/local/docker-data/<NOMBRE PROYECTO>-instalacion
-    TOBA_BASE_HOST                    : pg
-    TOBA_BASE_NOMBRE                  : toba_<NOMBRE PROYECTO>
-    TOBA_PROYECTO                     : <NOMBRE PROYECTO>
-    TOBA_PROYECTO_DIR                 : /var/local/<NOMBRE PROYECTO>
-    TOBA_PROYECTO_ALIAS               : /<NOMBRE PROYECTO>
-    TOBA_PROYECTO_INSTALAR            : "True"
-    TOBA_INSTALAR_REFERENCIA          : "True"
-    TOBA_INSTALAR_USUARIOS            : "True"
-  links:
-   - pg
-  volumes:
-   - .:/var/local/<NOMBRE PROYECTO>
-   - ./instalacion:/var/local/docker-data/<NOMBRE PROYECTO>-instalacion
+ '${APP_NAME}':
+    build:
+      context: .
+      dockerfile: ./7.4-alpine/Dockerfile
+    container_name: '${APP_NAME}'
+    ports:
+      - "7008:8080"
+    environment:
+      DOCKER_NAME                       : '${APP_NAME}'
+      DOCKER_WEB_PORT                   : 7008
+      TOBA_PASS                         : toba
+      TOBA_BASE_PASS                    : postgres
+      TOBA_INSTALACION_DIR              : /var/local/docker-data/'${APP_NAME}'-instalacion
+      TOBA_BASE_HOST                    : pg
+      TOBA_BASE_NOMBRE                  : toba_'${APP_NAME}'
+      TOBA_PROYECTO                     : '${APP_NAME}'
+      TOBA_PROYECTO_DIR                 : /var/local/'${APP_NAME}'
+      TOBA_PROYECTO_ALIAS               : /'${APP_NAME}'
+      TOBA_PROYECTO_INSTALAR            : "True"
+      TOBA_INSTALAR_REFERENCIA          : "True"
+      TOBA_INSTALAR_USUARIOS            : "True"
+    links:
+    - pg
+    volumes:
+    - .:/var/local/'${APP_NAME}'
+    - ./instalacion:/var/local/docker-data/'${APP_NAME}'-instalacion
