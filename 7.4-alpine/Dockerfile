@@ -33,6 +33,9 @@ RUN apk --no-cache add \
     php7-xsl \
     libsodium \
     curl \
+    git \
+    yarn\
+
     && echo "date.timezone  = $TZ" > /etc/php7/conf.d/80-siu-timezone.ini \
     && rm -rf /var/cache/apk/*
 
@@ -41,6 +44,8 @@ FROM cli as web
 RUN apk --no-cache add \
     apache2 \
     php7-apache2 \
+    # instala composer
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer \
     && rm -rf /var/cache/apk/* \
     && mkdir -p /var/log/apache2 \
     && ln -s /dev/stderr /var/log/apache2/error.log \
